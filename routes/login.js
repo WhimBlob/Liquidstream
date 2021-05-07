@@ -11,8 +11,8 @@ var session = require('express-session');
 
 /* Connect one User. */
 router.post('/', async (req, res, next) => {
-  var {username, password} = req.body
-  var user = await mongoose.model('User').findOne({username, password}).lean();
+  var {logusername, logpassword} = req.body
+  var user = await mongoose.model('User').findOne({logusername, logpassword}).lean();
   console.log(user);
   if (!user) {
     return res.json({status: 'error', error: 'Invalid username/password'})
