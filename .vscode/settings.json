@@ -1,0 +1,8 @@
+{
+  "appService.zipIgnorePattern": [
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/f6386c05-cb73-4f5a-a901-22ad34d732d8/resourceGroups/LiquidStream/providers/Microsoft.Web/sites/LiquidStream",
+  "appService.deploySubpath": "back"
+}

@@ -9,7 +9,7 @@ const form = document.getElementById('reg-form')
 				const username = document.getElementById('username').value
 				const password = document.getElementById('password').value
 
-				const result = await fetch('/../users', {
+				await fetch('/../users', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -25,12 +25,12 @@ const form = document.getElementById('reg-form')
 const logform = document.getElementById('login')
 logform.addEventListener('submit', login)
 
-async function login(event) {
+async function login() {
   console.log('Le log est capté')
   const username = document.getElementById('logusername').value
   const password = document.getElementById('logpassword').value
 
-   await fetch('/../login', {
+   var result = await fetch('/../login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -40,13 +40,17 @@ async function login(event) {
       password
     })
   }).then((res) => res.json())
+
+  if(result.status ==='ok') {
+    console.log(result.loguser)
+  }
 }
 
 // Log Out
 const logoutform = document.getElementById('logout')
 logoutform.addEventListener('submit', logout)
 
-async function logout(event) {
+async function logout() {
   await fetch('/../logout', {
     method: 'POST',
     headers: {
