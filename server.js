@@ -15,26 +15,6 @@ var JWT_SECRET = 'shuebfosnefihnepmrgn"àrubzçisub::;(§è!çàhtisbofgnspf';
 var http = require('http');
 var socketio = require('socket.io');
 
-// token middleware
-const authenticateJWT = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (authHeader) {
-      const token = authHeader.split(' ')[1];
-
-      jwt.verify(token, JWT_SECRET, (err, user) => {
-          if (err) {
-              return res.sendStatus(403);
-          }
-
-          req.user = user;
-          next();
-      });
-  } else {
-      res.sendStatus(401);
-  }
-};
-
 // Connect to mongoose
 var mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://WhimBlob:LiquidC@k3@liquidstream.0fw8v.mongodb.net/liquidtb?retryWrites=true&w=majority', {
@@ -45,9 +25,6 @@ mongoose.connect('mongodb+srv://WhimBlob:LiquidC@k3@liquidstream.0fw8v.mongodb.n
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login');
-var loggedRouter = require('./routes/logged');
-var logoutRouter = require('./routes/logout');
 
 const { constants } = require('fs');
 
@@ -107,10 +84,6 @@ app.use(session({
 // The routers
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-// Pour le login/logout
-// app.use('/login', loginRouter);
-// app.use('/logout', logoutRouter)
-// app.use('/logged', loggedRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -31,53 +31,32 @@ router.get('/:id', async (req, res, next) => {
 // Cryptage pour un temps plein d'espoir
 // var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+const app = require('../server.js');
 var JWT_SECRET = 'shuebfosnefihnepmrgn"àrubzçisub::;(§è!çàhtisbofgnspf';
 
 /* Connect one User. */
 router.post('/login', async (req, res, next) => {
-  var {logusername, logpassword} = req.body
-  var user = await mongoose.model('User').findOne({logusername, logpassword}).lean();
-  console.log(user);
+  console.log(req.header("token"));
+    var {username, password} = req.body
+    var user = await User.findOne({username, password}).lean();
+    console.log(user);
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-      username: user.username
-    },
-    JWT_SECRET
-  )
-  console.log(token);
-  console.log(user._id);
-  res.json({token});
+    const token = jwt.sign(
+      {
+          id: user._id,
+          username: user.username
+      },
+      JWT_SECRET,
+      {expiresIn: '1d'}
+    )
 
-  if (!user) {
-    return res.json({status: 'error', error: 'Invalid username/password'})
-  }
-});
+    res.json({
+      message: 'Successful log in',
+      data: token});
 
-// GET LOGGED USER
-const auth = function(req, res, next) {
-  const token = req.header("token");
-  if (!token) return res.status(401).json({ message: "Auth Error" });
-
-  try {
-    const decoded = jwt.verify(token, "randomString");
-    req.user = decoded.user;
-    next();
-  } catch (e) {
-    console.error(e);
-    res.status(500).send({ message: "Invalid Token" });
-  }
-};
-
-router.get("/me", auth, async (req, res) => {
-  try {
-    // request.user is getting fetched from Middleware after token authentication
-    const user = await User.findById(req.user.id);
-    res.json(user);
-  } catch (e) {
-    res.send({ message: "Error in Fetching user" });
-  }
+    if (!user) {
+      return res.json({status: 'error', error: 'Invalid username/password'})
+    }
 });
 
 module.exports = router;
