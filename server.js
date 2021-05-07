@@ -6,7 +6,9 @@ var logger = require('morgan');
 var session = require('express-session');
 var formatMessage = require('./utils/messages');
 var router = express.Router();
+var cors = require('cors');
 var FileStore = require('session-file-store') (session);
+var API_BASE_URL = '/routes'
 
 
 var http = require('http');
@@ -37,6 +39,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // When client connects
@@ -62,7 +65,7 @@ io.on('connection', socket => {
 });
 
 
-const PORT = 3000 || process.env.PORT;
+const PORT = 5000 || process.env.PORT;
 
 server.listen(PORT, () => console.log());
 
